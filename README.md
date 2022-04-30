@@ -1,5 +1,5 @@
 # DAG
-This is a hasty readme for review only :stuck_out_tongue:
+This is a hasty readme for review only :P
 
 We use three datasets: `'isAcyclic'`, `'MUTAG'` and `'highschool'`, change [here](https://github.com/Gori-LV/DAG/blob/main/main.py#L52) to test them.
 
