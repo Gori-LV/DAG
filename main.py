@@ -1,21 +1,14 @@
 import math
 import statistics
-# from gSpan import candidate_generation
 from util import visualResult
-# from model_score import getScore
 import argparse
 import os
 import torch
 import torch.nn as nn
-# import os
 import json
-# import re
 import numpy as np
-# import networkx as nx
-# import explain
 from models import *
 from explain import *
-# from tu_gnn_baselines.original_gnn_architectures import GINE0
 
 import time
 
