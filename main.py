@@ -89,9 +89,6 @@ if __name__ == '__main__':
 	end = time.time()
 	print('time used')
 	print(end - start)
-
-	print('\nEvaluation on the output set:')
-	explainer.evalOutput(output, read_out=True)
 	# visualResult(output=output, gSpanOutput=explainer.gSpan_output_file, if_highschool=if_highschool, if_isAcyclic=if_isAcyclic, save_path=explainer.save_path)
 
 	# #### for repeating test
@@ -101,10 +98,4 @@ if __name__ == '__main__':
 	# end = time.time()
 	# print('time used')
 	# print((end - start)/repeat)
-	# #
-	# # print('final output')
-	# # print(output)
-	# print('\nEvaluation on final explanation set:')
-	# explainer.evalOutput(output, read_out=True)
 	# # visualResult(output=output, gSpanOutput=explainer.gSpan_output_file, if_isAcyclic=if_isAcyclic, if_highschool= if_highschool, save_path=explainer.save_path)
-	# # print(explainer.calObj(output)/explainer.Lambda[0])
