@@ -52,7 +52,7 @@ if __name__ == '__main__':
 	dataset = 'MUTAG' # other datasets: 'isAcyclic' 'highschool'
 	n_nodes = 'all' # for isAcyclic dataset only
 	gnn = 'GIN' # for MUTAG and isAcyclic datasets only
-	target_class = 1
+	target_class = 1 # class 1 or class 0 for isAcyclic and highschool, class 1 only for MUTAG
 	model = loadGNN(dataset, gnn)
 
 	if_highschool = False
