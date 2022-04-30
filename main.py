@@ -49,7 +49,7 @@ if __name__ == '__main__':
 	with open('parameters.json','r') as f:
 		parameters = json.load(f)
 
-	dataset = 'MUTAG'
+	dataset = 'MUTAG' # other datasets: 'isAcyclic' 'highschool'
 	n_nodes = 'all' # for isAcyclic dataset only
 	gnn = 'GIN' # for MUTAG and isAcyclic datasets only
 	target_class = 1
