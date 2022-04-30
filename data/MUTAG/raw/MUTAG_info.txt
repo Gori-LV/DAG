@@ -1,0 +1,7 @@
+# graphs: 188
+# class 0: 125
+# class 1: 63
+min. # nodes: 10
+max. # nodes: 28
+avg. # nodes: 17.9309
+std. # nodes: 4.5879
