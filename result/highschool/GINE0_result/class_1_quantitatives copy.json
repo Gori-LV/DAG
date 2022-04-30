@@ -1,0 +1,9 @@
+[3.94, 0.9721715691628912, 0.7893211313818455, 0.21067886861815438, 7.759547619047618]
+
+time used
+24.248266019821166
+Evaluation on final explanation set:
+number of explanantions: 2
+GNN score: 0.979169100522995
+self-sup: 0.8
+self-den: 0.2
