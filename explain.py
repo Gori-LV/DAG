@@ -4,12 +4,9 @@ from pprint import pprint
 import numpy as np
 import json
 import random
-# import math
 
 import torch
 import torch.nn as nn
-# import models # this is for old GNN by GNNExplainer
-# from dig_models import *
 from torch_geometric.data import Data
 import torch_geometric
 import networkx as nx
@@ -499,20 +496,6 @@ class DAG:
         return E
 
     def repeatExplain(self, k, repeat, target_class, par_test = False, test_base = None, save = False):
-        # if not os.path.isdir('result'):
-        #     os.mkdir('result')
-        # if not os.path.isdir(os.path.join('result', self.dataset)):
-        #     os.mkdir(os.path.join('result', self.dataset))
-
-        # self.save_path = 'result/'+self.dataset+'/'+self.model._get_name()+'_result/'
-        # if not os.path.isdir(self.save_path):
-        #     os.mkdir(self.save_path)
-
-        # if self.dataset=='isAcyclic':
-        #     self.save_path = 'result/'+self.dataset+'/'+self.model._get_name()+'_result/'+str(self.isAcyclic_n_nodes)+'_nodes/'
-        #     if not os.path.isdir(self.save_path):
-        #         os.mkdir(self.save_path)
-
         exp_output = []
         # exp_population = set()
         # while len(exp_output)<repeat:
@@ -624,79 +607,3 @@ class DAG:
         score = self.Lambda[0]*F + self.Lambda[1]*S + self.Lambda[2]*D + self.Lambda[-1]*Z
         return score/self.Lambda[0]
         
-    # def evalAllClassOutput(self, output):
-    #     # process output and evaluate
-    #     print('############### evaluation')
-
-    #     output_0 = list([x for x in output if x[-1]==0])
-    #     output_1 = list([x for x in output if x[-1]==1])
-    #     # if len(output_0)==0:
-    #     #     print('Warning: 0 explanation for class 0')
-    #     print('explanantion for class 0')
-    #     print(output_0)
-
-    #     print('explanantion for class 1')
-    #     print(output_1)
-
-    #     # evaluation
-    #     # Size of global explanation set
-    #     print('Total no. explanation generated: ')
-    #     print(len(output_0+output_1))
-
-    #     evaluation = self.evalStat(output_0+output_1)
-    #     print('Recognition, coverage(0,1) , disagreement(0,1), overlap')
-    #     print(evaluation)
-    #     print('Objective: expressiveness, support, denial, in-class co-orr, cross-class co-orr, comprehensiveness, size. Lambda: ')
-    #     print(self.Lambda)
-
-    # def singleTuning(self, pos, test_base, k ,r):
-    #     if self.Lambda[pos]==0:
-    #         step = 10
-    #     else:
-    #         step = .5*self.Lambda[pos]
-    #     exp_output, exp_population = self.repeatExplain(k, r, par_test = True, test_base = test_base)
-    #     output_withWeight = self.generateOutput(exp_output, exp_population, diversity_weight = True, diver_dic = self.diver_dic)
-    #     eval_metric = self.evalStat(output_withWeight)
-    #     denial = (self.n_inst_clss[0]*eval_metric[3]+self.n_inst_clss[1]*eval_metric[4])/self.n_total_inst
-    #     sign = 1
-    #     c = 0
-    #     while denial<0.02 and eval_metric[-1]<0.005 and len(output_withWeight)<=.1*self.n_total_inst:
-    #         old_eval = eval_metric
-    #         self.Lambda[pos]+= sign*step
-    #         exp_output, exp_population = self.repeatExplain(k, r, par_test=True, test_base=test_base)
-    #         output_withWeight = self.generateOutput(exp_output, exp_population, diversity_weight=True,
-    #                                                 diver_dic=self.diver_dic)
-    #         eval_metric = self.evalStat(output_withWeight)
-    #         denial = (self.n_inst_clss[0]*eval_metric[3]+self.n_inst_clss[1]*eval_metric[4])/self.n_total_inst
-    #         c+=1
-    #         if eval_metric[0]<old_eval[0]:
-    #             sign = sign*(-1)
-    #     print('Finished tuning pos '+str(pos)+', took '+str(c)+' steps.')
-    #     return c
-
-    # def parTuning(self, k, r):
-    #     test_base = random.sample([(x,0) for x in range(self.n_subgraph)]+[(x,1) for x in range(self.n_subgraph)], int(0.05*2*self.n_subgraph))
-    #     self.test_base = test_base
-    #     times = 100
-    #     while times>3:
-    #         times = 0
-    #         fold = list(range(len(self.Lambda)))
-    #         fold.remove(fold[-2])
-    #         while len(fold)>0:
-    #             pos = random.choice(fold)
-    #             times+=self.singleTuning(pos, test_base,k, r)
-    #             fold.remove(pos)
-    #     print('Finished tuning! Tuned Lambda is')
-    #     print(self.Lambda)
-
-
-if __name__ == "__main__":
-    path = 'data/MUTAG/'
-    gSpan_output = 'MUTAG_data_no_edge_s9_l4_u9_gSpan'
-    score_file = 'MUTAG_data_no_edge_s9_l4_u9_gSpan.json'
-    model = DAG(path=path, gSpan_output=gSpan_output, score_file=score_file, n_class=2, n_inst_clss=[63, 125])
-    model.Lambda = np.array([10000, 10000, 10000, model.n_total_inst*model.n_subgraph*model.n_subgraph/100000, model.n_total_inst*model.n_subgraph*model.n_subgraph/10000000, 10, model.size_D/10], dtype=np.int64)
-    # k = 2*model.n_subgraph
-    # # k = 100
-    # model.evalOutput(model.explain(k))
-    # print('k = '+str(k))
