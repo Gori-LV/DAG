@@ -70,7 +70,9 @@ if __name__ == '__main__':
 		if dataset=='highschool':
 			if_highschool=True
 			gnn ='GINE'
-		lambdas = np.array(parameters[dataset][gnn][str(target_class)], dtype=np.int64)
+			lambdas = np.array(parameters[dataset][gnn][str(target_class)], dtype=np.int64)
+		else:
+			lambdas = np.array(parameters[dataset][gnn], dtype=np.int64)
 		explainer = DAG(dataset = dataset, model=model, lambdas=lambdas)
 
 	n_candidate = len([x for x in explainer.candidate if x[1]==target_class])
