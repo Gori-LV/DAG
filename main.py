@@ -86,7 +86,6 @@ if __name__ == '__main__':
 	print(end - start)
 	print('\nEvaluation on the output set:')
 	explainer.evalOutput(output, read_out=True)
-
 	# visualResult(output=output, gSpanOutput=explainer.gSpan_output_file, if_highschool=if_highschool, if_isAcyclic=if_isAcyclic, save_path=explainer.save_path)
 
 	# #### for repeating test
