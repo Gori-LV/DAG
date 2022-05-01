@@ -9,9 +9,9 @@ For isAcyclic and MUTAG dataset, you can set the GNN model to be `'GIN'` or `'GC
 
 The target class to be explained can be set [here](https://github.com/Gori-LV/DAG/blob/main/main.py#L55).
 
-Test the algorithm for one run: see [here](https://github.com/Gori-LV/DAG/blob/main/main.py#L79-L85).
+Test the algorithm for one run: see [here](https://github.com/Gori-LV/DAG/blob/main/main.py#L82-L89).
 
-Alternatively, you can also repeat running the algorithm for multiple times by uncommenting [these](https://github.com/Gori-LV/DAG/blob/main/main.py#L87-L94).
+Alternatively, you can also repeat running the algorithm for multiple times by uncommenting [these](https://github.com/Gori-LV/DAG/blob/main/main.py#L91-L100).
 
-The results and evaluation will be automatically printed and saved to the result folder. If you want to visualize the outputs, uncomment [here](https://github.com/Gori-LV/DAG/blob/main/main.py#L85) or [here](https://github.com/Gori-LV/DAG/blob/main/main.py#L94) (WARNING: all outputs will be replaced).
+The results and evaluation will be automatically printed and saved to the result folder. If you want to visualize the outputs, uncomment [here](https://github.com/Gori-LV/DAG/blob/main/main.py#L89) or [here](https://github.com/Gori-LV/DAG/blob/main/main.py#L100) (WARNING: all outputs will be replaced).
 
