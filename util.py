@@ -18,15 +18,7 @@ def plot_highschool(chunk, savefig_path):
 
     vlbs = {x[0]:x[1] for x in v}
     elbs = {(x[0],x[1]):x[-1] for x in e}
-    # vlbs = {vid: v.vlb for vid, v in self.vertices.items()}
-    # elbs = {}
-    # for vid, v in self.vertices.items():
-    #     gnx.add_node(vid, label=v.vlb)
-    # for vid, v in self.vertices.items():
-    #     for to, e in v.edges.items():
-    #         if (not self.is_undirected) or vid < to:
-    #             gnx.add_edge(vid, to, label=e.elb)
-    #             elbs[(vid, to)] = e.elb
+
     fsize = (min(16, 1 * len(v)),
              min(16, 1 * len(v)))
 
@@ -48,8 +40,8 @@ def plot_highschool(chunk, savefig_path):
 
     # nx.draw_networkx_nodes(gnx, pos, nodelist=red_node, node_color="darkred",node_size=0)
     # nx.draw_networkx_nodes(gnx, pos, nodelist=green_node, node_color="g",node_size=0)
-    nx.draw_networkx_nodes(gnx, pos, nodelist=red_node, node_color="darkred",node_size=250)
-    nx.draw_networkx_nodes(gnx, pos, nodelist=green_node, node_color="g",node_size=250)
+    nx.draw_networkx_nodes(gnx, pos, nodelist=red_node, node_color="darkred",node_size=350)
+    nx.draw_networkx_nodes(gnx, pos, nodelist=green_node, node_color="g",node_size=350)
     nx.draw_networkx_edges(
         gnx,
         pos,
@@ -108,7 +100,7 @@ def plot_highschool(chunk, savefig_path):
         gnx,
         pos,
         edgelist=propagation,
-        width=18,
+        width=20,
         alpha=.3,
         edge_color="red",
     )
@@ -133,15 +125,7 @@ def plot(chunk, savefig_path):
 
     vlbs = {x[0]:x[1] for x in v}
     elbs = {(x[0],x[1]):x[-1] for x in e}
-    # vlbs = {vid: v.vlb for vid, v in self.vertices.items()}
-    # elbs = {}
-    # for vid, v in self.vertices.items():
-    #     gnx.add_node(vid, label=v.vlb)
-    # for vid, v in self.vertices.items():
-    #     for to, e in v.edges.items():
-    #         if (not self.is_undirected) or vid < to:
-    #             gnx.add_edge(vid, to, label=e.elb)
-    #             elbs[(vid, to)] = e.elb
+
     fsize = (min(16, 1 * len(v)),
              min(16, 1 * len(v)))
 
@@ -170,15 +154,7 @@ def plot_isAcyclic(chunk, savefig_path):
 
     vlbs = {x[0]:x[1] for x in v}
     elbs = {(x[0],x[1]):x[-1] for x in e}
-    # vlbs = {vid: v.vlb for vid, v in self.vertices.items()}
-    # elbs = {}
-    # for vid, v in self.vertices.items():
-    #     gnx.add_node(vid, label=v.vlb)
-    # for vid, v in self.vertices.items():
-    #     for to, e in v.edges.items():
-    #         if (not self.is_undirected) or vid < to:
-    #             gnx.add_edge(vid, to, label=e.elb)
-    #             elbs[(vid, to)] = e.elb
+
     fsize = (min(16, 1 * len(v)),
              min(16, 1 * len(v)))
 
@@ -186,6 +162,7 @@ def plot_isAcyclic(chunk, savefig_path):
     plt.box(False)
     pos = nx.kamada_kawai_layout(gnx)
     nx.draw_networkx(gnx, pos, arrows=False, node_color = 'dodgerblue', with_labels=False)
+    # nx.draw_networkx(gnx, pos, arrows=False, node_color = 'orange', with_labels=False) # for glocal
     # nx.draw_networkx_edge_labels(gnx, pos, edge_labels=elbs)
 
     plt.savefig(savefig_path+ str(gnx.graph['id'])+'.png',bbox_inches="tight")
