@@ -360,6 +360,7 @@ class GlobalMeanPool(GNNPool):
     def forward(self, x, batch):
         return gnn.global_mean_pool(x, batch)
 
+    
 class GlobalMaxPool(GNNPool):
 
     def __init__(self):
