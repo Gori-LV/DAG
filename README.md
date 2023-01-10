@@ -1,4 +1,4 @@
-# #55-DAG
+# #1001-DAG
 This is a hasty readme for review only :P
 
 We use three datasets: `'isAcyclic'`, `'MUTAG'` and `'highschool'`, change [here](https://github.com/Gori-LV/DAG/blob/main/main.py#L52) (line 52 in main.py) to test them.
