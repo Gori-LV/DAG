@@ -49,16 +49,16 @@ if __name__ == '__main__':
 	with open('parameters.json','r') as f:
 		parameters = json.load(f)
 
-	dataset = 'MUTAG' # other datasets: 'isAcyclic' 'highschool'
+	dataset = 'isAcyclic' # other datasets: 'MUTAG' 'highschool'
 	n_nodes = 'all' # for isAcyclic dataset only
-	gnn = 'GIN' # for MUTAG and isAcyclic datasets only
+	gnn = 'GCN' # for MUTAG and isAcyclic datasets only
 	target_class = 1 # class 1 or class 0 for isAcyclic and highschool, class 1 only for MUTAG
 	model = loadGNN(dataset, gnn)
 
 	if_highschool = False
 	if_isAcyclic = False
 
-	# Overall fidelity, total support, average denial, size penalty
+
 	if dataset=='isAcyclic':
 		if_isAcyclic = True
 		if n_nodes=='all':
@@ -84,7 +84,7 @@ if __name__ == '__main__':
 	end = time.time()
 	print('time used')
 	print(end - start)
-	print('\nEvaluation on the final output explanation:')
+	print('\nEvaluation on the final output explanation:') # Overall fidelity, total support, average denial, size penalty
 	explainer.evalOutput(output, read_out=True)
 	# visualResult(output=output, gSpanOutput=explainer.gSpan_output_file, if_highschool=if_highschool, if_isAcyclic=if_isAcyclic, save_path=explainer.save_path)
 
@@ -93,7 +93,7 @@ if __name__ == '__main__':
 	# start = time.time()
 	# _, output = explainer.repeatExplain(k, repeat, target_class=target_class, save=True)
 	# end = time.time()
-	# print('\nEvaluation on the final output explanation:')
+	# print('\nEvaluation on the final output explanation:') # Overall fidelity, total support, average denial, size penalty
 	# explainer.evalOutput(output, read_out=True)
 	# print('time used')
 	# print((end - start)/repeat)
