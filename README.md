@@ -4,7 +4,7 @@ This is the official implement of the paper _On Data-Aware Global Explainability
 
 [//]: # (![our_work]&#40;/intro_eg.png&#41;)
 <p align="center">
-  <img src="https://github.com/Gori-LV/DAG/blob/main/workflow.pdf" />
+  <img src="https://github.com/Gori-LV/DAG/blob/main/workflow.png" />
 </p>
 
 [//]: # ([On Explainability of Graph Neural Networks via Subgraph Explorations]&#40;https://arxiv.org/abs/2102.05152&#41;)
