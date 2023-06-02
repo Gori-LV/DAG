@@ -5,7 +5,8 @@ This is the official implement of the paper _On Data-Aware Global Explainability
 [//]: # (![our_work]&#40;/intro_eg.png&#41;)
 <p align="center">
   <img src="https://github.com/Gori-LV/DAG/blob/main/workflow.png" />
-    **Figure**. Workflow of DAG-Explainer.
+
+[//]: # (    Figure. Workflow of DAG-Explainer.)
 </p>
 
 [//]: # ([On Explainability of Graph Neural Networks via Subgraph Explorations]&#40;https://arxiv.org/abs/2102.05152&#41;)
@@ -31,5 +32,5 @@ $ source ./scripts.sh
 The hyper-parameters used for different datasets are shown in this script.
 
 
-<!-- ## Examples
-Run `*.ipynb` files in Jupyter Notebook or Jupyter Lab.  We provide examples on how to use DAG to explain individual instances, and show the semantic meanings of output explanation in DBLP, IMDB and MUTAG dataset, respectively. -->
+## Examples
+We provide examples on how to use DAG-Explainer on the three dataset. Run `*.ipynb` files in Jupyter Notebook or Jupyter Lab. 

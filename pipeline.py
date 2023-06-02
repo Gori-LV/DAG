@@ -60,7 +60,7 @@ def main():
 
     if dataset=='ISACYCLIC':
         n_nodes = prog_args.n_nodes
-    model = loaGNNN(dataset, prog_args.gnn.upper())
+    model = loadGNN(dataset, prog_args.gnn.upper())
 
     lambdas = np.array([1, prog_args.lambda_1, prog_args.lambda_2, prog_args.lambda_3])
 
