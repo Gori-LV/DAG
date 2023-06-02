@@ -1,17 +1,34 @@
-# #1001-DAG
-This is a hasty readme for review only :P
+# DAG
 
-We use three datasets: `'isAcyclic'`, `'MUTAG'` and `'highschool'`, change [here](https://github.com/Gori-LV/DAG/blob/main/main.py#L52) (line 52 in main.py) to test them.
+This is the official implement of the paper _On Data-Aware Global Explainability of Graph Neural Networks_.
 
-For _isAcyclic-n*_, you can set the number of nodes in the candidate [here](https://github.com/Gori-LV/DAG/blob/main/main.py#L53) (line 53 in main.py), or input `'all'` to test for isAcyclic using the complete candidate space.
+[//]: # (![our_work]&#40;/intro_eg.png&#41;)
+<p align="center">
+  <img src="https://github.com/Gori-LV/DAG/blob/main/workflow.pdf" />
+</p>
 
-For isAcyclic and MUTAG dataset, you can set the GNN model to be `'GIN'` or `'GCN'` [here](https://github.com/Gori-LV/DAG/blob/main/main.py#L54) (line 54 in main.py). For highschool dataset, it is GINE model by default.
+[//]: # ([On Explainability of Graph Neural Networks via Subgraph Explorations]&#40;https://arxiv.org/abs/2102.05152&#41;)
 
-The target class to be explained can be set [here](https://github.com/Gori-LV/DAG/blob/main/main.py#L55) (line 55 in main.py).
 
-Test the algorithm for one run: see [here](https://github.com/Gori-LV/DAG/blob/main/main.py#L82-L89) (line 92-89 in main.py).
+## Installation
+* Clone the repository 
+* Create the env and install the requirements
 
-Alternatively, you can also repeat running the algorithm for multiple times by uncommenting [these](https://github.com/Gori-LV/DAG/blob/main/main.py#L91-L100) (line 91-100 in main.py).
+```shell script
+$ git clone https://github.com/Gori-LV/DAG
+$ cd DAG
+$ source ./install.sh
+```
 
-The results and evaluation will be automatically printed and saved to the result folder. If you want to visualize the outputs, uncomment [here](https://github.com/Gori-LV/DAG/blob/main/main.py#L89) (line 89 in main.py) or [here](https://github.com/Gori-LV/DAG/blob/main/main.py#L100) (line 100 in main.py). WARNING: all outputs will be replaced.
+## Usage
+* Download the required [datasets](https://hkustconnect-my.sharepoint.com/:f:/g/personal/glvab_connect_ust_hk/EpM6pkwnocROhKFBgJBIrqMBcfT0EX81WQA0RwpvqN923g?e=tNKQIF) to `/data`
+* Download the [checkpoints](https://hkustconnect-my.sharepoint.com/:f:/g/personal/glvab_connect_ust_hk/Eg1VmSOyXFpHjIMP_gwXhssBR1OToeP4i75LUBlcmVgRCA?e=netLrt) to `/checkpoints`
+* Run the searching scripts with corresponding dataset.
+```shell script
+$ source ./scripts.sh
+``` 
+The hyper-parameters used for different datasets are shown in this script.
 
+
+<!-- ## Examples
+Run `*.ipynb` files in Jupyter Notebook or Jupyter Lab.  We provide examples on how to use DAG to explain individual instances, and show the semantic meanings of output explanation in DBLP, IMDB and MUTAG dataset, respectively. -->

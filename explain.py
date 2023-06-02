@@ -4,10 +4,13 @@ from pprint import pprint
 import numpy as np
 import json
 import random
+# import math
 
 import torch
 import torch.nn as nn
-
+# import models # this is for old GNN by GNNExplainer
+# from dig_models import *
+from torch_geometric.data import Data
 import torch_geometric
 import networkx as nx
 from torch_geometric.datasets import TUDataset
@@ -43,7 +46,8 @@ class DAG:
         self.score, self.size_dict = self.getGNNscore()
         self.diver_dic =self.getDiverDic()
         # self.Lambda = Lambda
-        self.Lambda = np.array([lambdas[0], lambdas[1],lambdas[2], 0, 0, 0, lambdas[-1]],dtype=np.int64)
+        # self.Lambda = np.array([lambdas[0], lambdas[1],lambdas[2], 0, 0, 0, lambdas[-1]],dtype=np.int64)
+        self.Lambda = np.array([lambdas[0], lambdas[1],lambdas[2], 0, 0, 0, lambdas[-1]])
         self.candidate = self.getCandidate()        
         self.distribution = self.getDistribution()
 
@@ -73,6 +77,16 @@ class DAG:
 
     def getGNNscore(self):
         if self.dataset=='highschool':
+
+            # gSpan_output_data = TUDataset('data/highschool/', name='gSpan_output_data',use_edge_attr = True)
+            # score_loader = DataLoader(gSpan_output_data, batch_size=len(gSpan_output_data), shuffle=False)
+
+            # model.eval()
+            # for d in score_loader:
+            #     output=model(d).data
+            # score = [[x.item() for x in nn.Softmax(dim=0)(o)] for o in output]
+            # return score, None
+
             with open(self.gSpan_output_file,'r') as f:
                 content = f.readlines()
             graphs = []
@@ -95,6 +109,19 @@ class DAG:
                 size[i] = {}
                 size[i]['n'] = graphs[i].number_of_nodes()
                 size[i]['e'] = graphs[i].number_of_edges()
+                # data = torch_geometric.utils.convert.from_networkx(graphs[i])
+                # x = []
+                # for node in graphs[i].nodes:
+                #     tmp = base.copy()
+                #     tmp[graphs[i].nodes[node]['label']] = 1  # one-hot encoding
+                #     x.append(tmp)
+                # data.x = torch.tensor(x, dtype=torch.float32)
+                # edge_attr = []
+                # for edge in graphs[i].edges:
+                #     edge_attr.append([graphs[i].edges[edge]['label']])
+                #     edge_attr.append([graphs[i].edges[edge]['label']])
+                # data.edge_attr = torch.tensor(edge_attr, dtype=torch.float32)
+                # data_items.append(data)
 
             gSpanOutput_data = TUDataset('data/', 'sampled_subgraph_s5_l3_u7',   use_edge_attr = True)
             gSpanOutput_dataloader = DataLoader(gSpanOutput_data, batch_size=len(gSpanOutput_data), shuffle=False)
@@ -240,6 +267,9 @@ class DAG:
         # Cross-class co-occurrence
         marginal_gain.append(-np.sum(current_distr[1-new[1]][new_v.nonzero()[0]])/(self.n_total_inst*self.n_subgraph*self.n_subgraph))
 
+        # marginal_gain.append(-np.sum((current_distr[0]+current_distr[1])[denail_idx][new_v[denail_idx].nonzero()[0]])/(n_total_inst*n_subgraph*n_subgraph))
+
+        # Comprehensiveness
         if new[1] not in [x[1] for x in E]:
             marginal_gain.append(1/self.n_class)
         else:
@@ -278,18 +308,21 @@ class DAG:
         distr_class0 = np.sum(self.distribution[:, [x[0] for x in E if x[1]==0]], axis=1)
         distr_class1 = np.sum(self.distribution[:, [x[0] for x in E if x[1]==1]], axis=1)
 
-        # Support
+        # Coverage
         union_support_0 = np.count_nonzero(distr_class0[list(self.true_label[0])])
         union_support_1 = np.count_nonzero(distr_class1[list(self.true_label[1])])
         evaluation.append((union_support_0+union_support_1)/self.n_total_inst)
 
 
-        # Denial
+        # Disagreement with data
         avg_denial_r_0 = np.sum(distr_class0[list(self.true_label[1])])/self.n_inst_clss[1]
         avg_denial_r_1 = np.sum(distr_class1[list(self.true_label[0])])/self.n_inst_clss[0]
 
+        # n_0 = len([x[0] for x in E if x[1]==0])
+        # n_1 = len([x[0] for x in E if x[1]==1])
         evaluation.append((avg_denial_r_0+avg_denial_r_1)/len(E))
 
+        # Redundancy and inconsistency
         distr = distr_class0+distr_class1
         pos = np.argwhere(distr > 1)
         if pos.size>0:
@@ -301,6 +334,8 @@ class DAG:
         else:
             avg_co_quot = 0
         evaluation.append(avg_co_quot)
+
+        # Comprehensiveness
         return evaluation
 
     def evalOutput(self, output, read_out = False):
@@ -318,7 +353,28 @@ class DAG:
         evaluation = np.mean(np.asarray(ind_eval), axis=0).tolist()
 
         evaluation.append(len(output))
-        
+        # distr = np.sum(self.distribution[:, [x[0] for x in output if x[1]==output_class]], axis=1)
+
+        # # Coverage
+        # union_support = np.count_nonzero(distr[list(self.true_label[output_class])])
+        # evaluation.append(union_support/self.n_inst_clss[output_class])
+
+        # # Disagreement with data
+        # avg_denial_r = np.sum(distr[list(self.true_label[1-output_class])])/self.n_inst_clss[1-output_class]
+        # evaluation.append(avg_denial_r/len(output))
+
+        # # Redundancy and inconsistency
+        # pos = np.argwhere(distr > 1)
+        # if pos.size>0:
+        #     co = 0
+        #     for p in pos:
+        #         # co += math.comb(distr[p][0],2)
+        #         co +=(distr[p][0]*(distr[p][0]-1))/2
+        #     avg_co_quot = 2*co/(self.n_total_inst*len(output)*(len(output)-1))
+        # else:
+        #     avg_co_quot = 0
+        # evaluation.append(avg_co_quot)
+
         if read_out:
             print('GNN score: '+str(evaluation[0]))
             print('self-sup: '+str(evaluation[1]))
@@ -345,6 +401,12 @@ class DAG:
         return picked
 
     def getCandidate(self):
+        # class0_idx = list(self.true_label[0])
+        # class1_idx = list(self.true_label[1])
+        # candidate = []
+        # for i in range(self.n_subgraph):
+        #     tmp = [np.sum(self.distribution[:,i][class0_idx]), np.sum(self.distribution[:,i][class1_idx])]
+        #     candidate.append((i,tmp.index(max(tmp))))
         candidate = [(x, self.score[x].index(max(self.score[x]))) for x in range(len(self.score))]
         return candidate
 
@@ -417,10 +479,48 @@ class DAG:
             # print('Current objective: '+str(objective))
             E.append(picked[0])
             i+=1
+
+        # if oneMore:
+        #     for c in range(self.n_class):
+        #         if len([e for e in E if e[-1]==c])==0:
+        #             print('Class '+str(c) +' exp is missing')
+        #             E.append(self.oneMore(E, candidate, c))
+
+        # if len(E) ==0:
+        #     print('+++ no explanantion is generated, rerun.')
+        #     return self.explain(k=k, target_class = target_class)
         
+        # if self.save_path is None:
+        #     print('no save_path')
+        #     if not os.path.isdir('result'):
+        #         os.mkdir('result')
+        #     if not os.path.isdir(os.path.join('result', self.dataset)):
+        #         os.mkdir(os.path.join('result', self.dataset))
+
+        #     self.save_path = 'result/'+self.dataset+'/'+self.model._get_name()+'_result/'
+        #     if not os.path.isdir(self.save_path):
+        #         os.mkdir(self.save_path)
+
+        #     if self.dataset=='isAcyclic':
+        #         self.save_path = 'result/'+self.dataset+'/'+self.model._get_name()+'_result/'+str(self.isAcyclic_n_nodes)+'_nodes/'
+        #         if not os.path.isdir(self.save_path):
+        #             os.mkdir(self.save_path)            
         return E
 
     def repeatExplain(self, k, repeat, target_class, par_test = False, test_base = None, save = False):
+        # if not os.path.isdir('result'):
+        #     os.mkdir('result')
+        # if not os.path.isdir(os.path.join('result', self.dataset)):
+        #     os.mkdir(os.path.join('result', self.dataset))
+
+        # self.save_path = 'result/'+self.dataset+'/'+self.model._get_name()+'_result/'
+        # if not os.path.isdir(self.save_path):
+        #     os.mkdir(self.save_path)
+
+        # if self.dataset=='isAcyclic':
+        #     self.save_path = 'result/'+self.dataset+'/'+self.model._get_name()+'_result/'+str(self.isAcyclic_n_nodes)+'_nodes/'
+        #     if not os.path.isdir(self.save_path):
+        #         os.mkdir(self.save_path)
 
         exp_output = []
         # exp_population = set()
@@ -451,6 +551,10 @@ class DAG:
             # with open(self.gSpan_output_file.replace('gSpan_output','class'+str(target_class)+'_all_exp.json'), 'w') as f:
             with open(self.save_path+'class_'+str(target_class)+'_all_exp.json', 'w') as f:
                 json.dump(exp_output, f)
+            # exp_output.pop(-1)
+            # output = self.generateOutput(exp_output, exp_population)
+            # with open(self.save_path+'class_'+str(target_class)+'_evalResult.json', 'w') as f:
+            #     json.dump(self.evalOutput(output), f)
 
         return exp_output, output
 
@@ -496,17 +600,34 @@ class DAG:
 
         all_exp = [x for x in all_exp_input if len(x)!=0]
 
+        # print('all_exp')
+        # print(all_exp)
+
         ind_run_eval = []
         for exp in all_exp:
             ind_run_eval.append(self.evalOutput(exp))
 
         multi_run_result = np.mean(np.asarray(ind_run_eval), axis=0).tolist()
 
+        # multi_run_result = []
+        # for exp in all_exp:
+        #   # nodes = 0
+        #   edges = 0
+        #   for e in exp:
+        #       # nodes+=self.size_dict[str(e[0])]['n']
+        #       edges+=self.size_dict[e[0]]['e']
+        #   # multi_run_result.append([len(exp)]+ self.evalOutput(exp)[1:4]+[nodes/len(exp), edges/len(exp)])
+        #   multi_run_result.append([len(exp)]+ self.evalOutput(exp)[1:4]+[edges/len(exp)])
+
+        # final_result = []
+        # for i in range(len(multi_run_result[0])):
+        #   final_result.append(sum([x[i] for x in multi_run_result])/len(multi_run_result))
+
         target_class= all_exp[0][0][-1]
         with open(self.save_path+'/class_'+str(target_class)+'_mulirun_quantitatives.json','w') as f:
           json.dump(multi_run_result,f)
-        print('multile run result')
-        print(multi_run_result)
+        # print('multile run result')
+        # print(multi_run_result)
 
     def calObj(self, output): # for exhaustive search for optima
 
@@ -524,3 +645,79 @@ class DAG:
         score = self.Lambda[0]*F + self.Lambda[1]*S + self.Lambda[2]*D + self.Lambda[-1]*Z
         return score/self.Lambda[0]
         
+    # def evalAllClassOutput(self, output):
+    #     # process output and evaluate
+    #     print('############### evaluation')
+
+    #     output_0 = list([x for x in output if x[-1]==0])
+    #     output_1 = list([x for x in output if x[-1]==1])
+    #     # if len(output_0)==0:
+    #     #     print('Warning: 0 explanation for class 0')
+    #     print('explanantion for class 0')
+    #     print(output_0)
+
+    #     print('explanantion for class 1')
+    #     print(output_1)
+
+    #     # evaluation
+    #     # Size of global explanation set
+    #     print('Total no. explanation generated: ')
+    #     print(len(output_0+output_1))
+
+    #     evaluation = self.evalStat(output_0+output_1)
+    #     print('Recognition, coverage(0,1) , disagreement(0,1), overlap')
+    #     print(evaluation)
+    #     print('Objective: expressiveness, support, denial, in-class co-orr, cross-class co-orr, comprehensiveness, size. Lambda: ')
+    #     print(self.Lambda)
+
+    # def singleTuning(self, pos, test_base, k ,r):
+    #     if self.Lambda[pos]==0:
+    #         step = 10
+    #     else:
+    #         step = .5*self.Lambda[pos]
+    #     exp_output, exp_population = self.repeatExplain(k, r, par_test = True, test_base = test_base)
+    #     output_withWeight = self.generateOutput(exp_output, exp_population, diversity_weight = True, diver_dic = self.diver_dic)
+    #     eval_metric = self.evalStat(output_withWeight)
+    #     denial = (self.n_inst_clss[0]*eval_metric[3]+self.n_inst_clss[1]*eval_metric[4])/self.n_total_inst
+    #     sign = 1
+    #     c = 0
+    #     while denial<0.02 and eval_metric[-1]<0.005 and len(output_withWeight)<=.1*self.n_total_inst:
+    #         old_eval = eval_metric
+    #         self.Lambda[pos]+= sign*step
+    #         exp_output, exp_population = self.repeatExplain(k, r, par_test=True, test_base=test_base)
+    #         output_withWeight = self.generateOutput(exp_output, exp_population, diversity_weight=True,
+    #                                                 diver_dic=self.diver_dic)
+    #         eval_metric = self.evalStat(output_withWeight)
+    #         denial = (self.n_inst_clss[0]*eval_metric[3]+self.n_inst_clss[1]*eval_metric[4])/self.n_total_inst
+    #         c+=1
+    #         if eval_metric[0]<old_eval[0]:
+    #             sign = sign*(-1)
+    #     print('Finished tuning pos '+str(pos)+', took '+str(c)+' steps.')
+    #     return c
+
+    # def parTuning(self, k, r):
+    #     test_base = random.sample([(x,0) for x in range(self.n_subgraph)]+[(x,1) for x in range(self.n_subgraph)], int(0.05*2*self.n_subgraph))
+    #     self.test_base = test_base
+    #     times = 100
+    #     while times>3:
+    #         times = 0
+    #         fold = list(range(len(self.Lambda)))
+    #         fold.remove(fold[-2])
+    #         while len(fold)>0:
+    #             pos = random.choice(fold)
+    #             times+=self.singleTuning(pos, test_base,k, r)
+    #             fold.remove(pos)
+    #     print('Finished tuning! Tuned Lambda is')
+    #     print(self.Lambda)
+
+
+if __name__ == "__main__":
+    path = 'data/MUTAG/'
+    gSpan_output = 'MUTAG_data_no_edge_s9_l4_u9_gSpan'
+    score_file = 'MUTAG_data_no_edge_s9_l4_u9_gSpan.json'
+    model = DAG(path=path, gSpan_output=gSpan_output, score_file=score_file, n_class=2, n_inst_clss=[63, 125])
+    model.Lambda = np.array([10000, 10000, 10000, model.n_total_inst*model.n_subgraph*model.n_subgraph/100000, model.n_total_inst*model.n_subgraph*model.n_subgraph/10000000, 10, model.size_D/10], dtype=np.int64)
+    # k = 2*model.n_subgraph
+    # # k = 100
+    # model.evalOutput(model.explain(k))
+    # print('k = '+str(k))
