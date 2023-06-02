@@ -21,8 +21,8 @@ $ source ./install.sh
 ```
 
 ## Usage
-* Download the required [datasets](https://hkustconnect-my.sharepoint.com/:f:/g/personal/glvab_connect_ust_hk/EpM6pkwnocROhKFBgJBIrqMBcfT0EX81WQA0RwpvqN923g?e=tNKQIF) to `/data`
-* Download the [checkpoints](https://hkustconnect-my.sharepoint.com/:f:/g/personal/glvab_connect_ust_hk/Eg1VmSOyXFpHjIMP_gwXhssBR1OToeP4i75LUBlcmVgRCA?e=netLrt) to `/checkpoints`
+* Download the required [datasets](https://hkustconnect-my.sharepoint.com/:f:/g/personal/glvab_connect_ust_hk/EqFR8NjD49tLtPp9TgicvjQBxkj_15wDT4D2fdrJ6Adx2A?e=P9NeHI) to `/data`
+* Download the [checkpoints](https://hkustconnect-my.sharepoint.com/:f:/g/personal/glvab_connect_ust_hk/EscGZSmy_W9KpSWE-cxk6yQB2_g3RYvO-LypseIN-X8Ngg) to `/checkpoints`
 * Run the searching scripts with corresponding dataset.
 ```shell script
 $ source ./scripts.sh
