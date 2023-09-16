@@ -39,7 +39,7 @@ We provide examples on how to use DAG-Explainer on the three dataset. Run `*.ipy
 Feel free to use our code and keep up with our progress, we kindly request you to cite our work.
 
 ```
-@article{lv2023data,
+@article{lv2023dag,
   title={On Data-Aware Global Explainability of Graph Neural Networks},
   author={Lv, Ge and Chen, Lei},
   journal={Proceedings of the VLDB Endowment},
