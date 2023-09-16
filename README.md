@@ -34,3 +34,19 @@ The hyper-parameters used for different datasets are shown in this script.
 
 ## Examples
 We provide examples on how to use DAG-Explainer on the three dataset. Run `*.ipynb` files in Jupyter Notebook or Jupyter Lab. 
+
+## Citation
+Feel free to use our code and keep up with our progress, we kindly request you to cite our work.
+
+```
+@article{lv2023data,
+  title={On Data-Aware Global Explainability of Graph Neural Networks},
+  author={Lv, Ge and Chen, Lei},
+  journal={Proceedings of the VLDB Endowment},
+  volume={16},
+  number={11},
+  pages={3447--3460},
+  year={2023},
+  publisher={VLDB Endowment}
+}
+```
