@@ -24,6 +24,7 @@ $ source ./install.sh
 
 ## Usage
 * Download the required [datasets](https://hkustconnect-my.sharepoint.com/:f:/g/personal/glvab_connect_ust_hk/EqFR8NjD49tLtPp9TgicvjQBxkj_15wDT4D2fdrJ6Adx2A?e=P9NeHI) to `/data`
+  > The candidates were generated using [gSpan](https://github.com/betterenvi/gSpan).
 * Download the [checkpoints](https://hkustconnect-my.sharepoint.com/:f:/g/personal/glvab_connect_ust_hk/EscGZSmy_W9KpSWE-cxk6yQB2_g3RYvO-LypseIN-X8Ngg) to `/checkpoints`
 * Run the searching scripts with corresponding dataset.
 ```shell script
